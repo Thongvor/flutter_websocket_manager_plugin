@@ -79,10 +79,3 @@ See the Contributing guide for details on contributing to this project.
 
 - Android: [okHttp](hthttps://github.com/square/okhttp/) created by [Square](https://github.com/square)
 - iOS: [Starscream](https://github.com/daltoniam/Starscream) created by [daltoniam](https://github.com/daltoniam)
-
-
-## Help Maintenance
-
-I've been maintaining quite many repos these days and burning out slowly. If you could help me cheer up, buying me a cup of coffee will make my life really happy and get much energy out of it.
-
-[![Paypal](https://www.paypalobjects.com/webstatic/mktg/Logo/pp-logo-100px.png)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=Y8SGQV7EBHZBC&source=url)
