@@ -1,8 +1,8 @@
 //
-//  StreamHandler.swift
-//  Pods-Runner
+//  EventStreamHandler.swift
+//  websocket_manager
 //
-//  Created by Luan Almeida on 15/11/19.
+//  Created by Thongvor on 7/6/21.
 //
 
 import Flutter
@@ -12,7 +12,6 @@ class EventStreamHandler : NSObject, FlutterStreamHandler {
     var sink:FlutterEventSink?
     
     func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
-        
         self.sink = events
         return nil
     }

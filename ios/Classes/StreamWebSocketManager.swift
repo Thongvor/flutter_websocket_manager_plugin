@@ -1,8 +1,8 @@
 //
-//  StreamManager.swift
+//  StreamWebSocketManager.swift
 //  websocket_manager
 //
-//  Created by Luan Almeida on 15/11/19.
+//  Created by Thongvor on 7/6/21.
 //
 
 import Starscream
@@ -12,9 +12,10 @@ class StreamWebSocketManager: NSObject, WebSocketDelegate {
     var ws: WebSocket?
     var updatesEnabled = false
 
+    var failureCallback: ((_ data: String) -> Void)?
+    var openCallback: ((_ data: String) -> Void)?
     var messageCallback: ((_ data: String) -> Void)?
     var closeCallback: ((_ data: String) -> Void)?
-    var conectedCallback: ((_ data: Bool) -> Void)?
 
     var enableRetries: Bool = true
 
@@ -57,9 +58,8 @@ class StreamWebSocketManager: NSObject, WebSocketDelegate {
 
     func onConnect() {
         ws?.onConnect = {
-            // print("opened")
-            if self.conectedCallback != nil {
-                (self.conectedCallback!)(true)
+            if self.openCallback != nil {
+                (self.openCallback!)(true)
             }
         }
     }
@@ -80,7 +80,6 @@ class StreamWebSocketManager: NSObject, WebSocketDelegate {
 
     func onText() {
         ws?.onText = { (text: String) in
-            // print("recv: \(text)")
             if self.messageCallback != nil {
                 (self.messageCallback!)(text)
             }
@@ -93,8 +92,8 @@ class StreamWebSocketManager: NSObject, WebSocketDelegate {
             if self.enableRetries {
                 self.connect()
             } else {
-                if self.conectedCallback != nil {
-                    (self.conectedCallback!)(false)
+                if self.openCallback != nil {
+                    (self.openCallback!)(false)
                 }
                 if self.closeCallback != nil {
                     if error != nil {

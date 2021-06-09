@@ -5,10 +5,14 @@ enum ChannelName {
     static let onMessage: String = "websocket_manager/message"
     static let onDone: String = "websocket_manager/done"
     static let status: String = "websocket_manager/status"
+    static let onOpen: String = "websocket_manager/open"
+    static let onFailure: String = "websocket_manager/failure"
 }
 
 @available(iOS 9.0, *)
 public class SwiftWebsocketManagerPlugin: NSObject, FlutterPlugin {
+    let openStreamHandler = EventStreamHandler()
+    let failureStreamHandler = EventStreamHandler()
     let messageStreamHandler = EventStreamHandler()
     let closeStreamHandler = EventStreamHandler()
     let statusStreamHandler = EventStreamHandler()
@@ -78,11 +82,18 @@ public class SwiftWebsocketManagerPlugin: NSObject, FlutterPlugin {
 
             streamWebSocketManager.messageCallback = resultHander
             streamWebSocketManager.onText()
-            // print("listening")
             result("")
         } else if call.method == "onDone" {
             streamWebSocketManager.closeCallback = closeHandler
             streamWebSocketManager.onClose()
+            result("")
+        } else if call.method == "onOpen" {
+            streamWebSocketManager.openCallback = openHandler
+            streamWebSocketManager.onOpen()
+            result("")
+        } else if call.method == "onFailure" {
+            streamWebSocketManager.failureCallback = failureHandler
+            streamWebSocketManager.onFailure()
             result("")
         }
     }
@@ -92,7 +103,14 @@ public class SwiftWebsocketManagerPlugin: NSObject, FlutterPlugin {
     }
 
     func closeHandler(msg: String) {
-        // print("closed \(msg)")
         closeStreamHandler.send(data: msg)
+    }
+
+    func openHandler(msg: String) {
+        openStreamHandler.send(data: msg)
+    }
+
+    func failureHandler(msg: String) {
+        failureStreamHandler.send(data: msg)
     }
 }

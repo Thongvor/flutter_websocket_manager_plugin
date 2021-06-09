@@ -16,9 +16,9 @@ class _MyAppState extends State<MyApp> {
   }
 
   final TextEditingController _urlController =
-      TextEditingController(text: 'wss://echo.websocket.org');
+      TextEditingController(text: 'wss://joitin-staging.herokuapp.com/secured/chat?Authorization=Bearer%20eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyYzIzZDI5Ni04NTZlLTQwOWMtYjNjMi0zZWE3Y2ZlNDQzYmQiLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxNjIzMzQyNDkxfQ.McUP3WJJAzj7OFZDxIBNP4ZsUmUyv3uuzLDs5dW_p8_bhW462Qgx4bKi3ZWl1XgcnO_FzP-eVBBYnKnvlF2URw');
   final TextEditingController _messageController = TextEditingController();
-  WebsocketManager socket;
+  WSManager socket;
   String _message = '';
   String _closeMessage = '';
 
@@ -39,7 +39,7 @@ class _MyAppState extends State<MyApp> {
                 RaisedButton(
                   child: Text('CONFIG'),
                   onPressed: () =>
-                      socket = WebsocketManager(_urlController.text),
+                      socket = WSManager(_urlController.text),
                 ),
                 RaisedButton(
                   child: Text('CONNECT'),
@@ -61,6 +61,10 @@ class _MyAppState extends State<MyApp> {
                   child: Text('LISTEN MESSAGE'),
                   onPressed: () {
                     if (socket != null) {
+                      socket.onOpen((dynamic message) {
+                        print('WS Opened');
+                        this.socket.send('{"typeOfMessage": "/secured/room/availableRooms"}');
+                      });
                       socket.onMessage((dynamic message) {
                         print('New message: $message');
                         setState(() {
@@ -85,7 +89,7 @@ class _MyAppState extends State<MyApp> {
                 ),
                 RaisedButton(
                   child: Text('ECHO TEST'),
-                  onPressed: () => WebsocketManager.echoTest(),
+                  onPressed: () => WSManager.echoTest(),
                 ),
               ],
             ),
