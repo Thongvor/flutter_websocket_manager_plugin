@@ -106,7 +106,7 @@ public class SwiftWebsocketManagerPlugin: NSObject, FlutterPlugin {
         closeStreamHandler.send(data: msg)
     }
 
-    func openHandler(msg: String) {
+    func openHandler(msg: Bool) {
         openStreamHandler.send(data: msg)
     }
 

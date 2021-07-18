@@ -13,7 +13,7 @@ class StreamWebSocketManager: NSObject, WebSocketDelegate {
     var updatesEnabled = false
 
     var failureCallback: ((_ data: String) -> Void)?
-    var openCallback: ((_ data: String) -> Void)?
+    var openCallback: ((_ data: Bool) -> Void)?
     var messageCallback: ((_ data: String) -> Void)?
     var closeCallback: ((_ data: String) -> Void)?
 
@@ -52,14 +52,24 @@ class StreamWebSocketManager: NSObject, WebSocketDelegate {
 //        } else {
 //            ws?.disableSSLCertValidation = false
 //        }
-        onConnect()
+        onOpen()
         onClose()
     }
 
-    func onConnect() {
-        ws?.onConnect = {
+    func onOpen() {
+        ws?.onConnect = { [weak self] in
+            guard let self = self else { return }
             if self.openCallback != nil {
                 (self.openCallback!)(true)
+            }
+        }
+    }
+    
+    func onFailure() {
+        ws?.onDisconnect = { [weak self] (error) in
+            guard let self = self else { return }
+            if self.failureCallback != nil {
+                (self.failureCallback!)(error?.localizedDescription ?? "")
             }
         }
     }
@@ -165,3 +175,4 @@ class StreamWebSocketManager: NSObject, WebSocketDelegate {
         //
     }
 }
+
