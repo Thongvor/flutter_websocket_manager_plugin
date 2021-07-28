@@ -32,7 +32,8 @@ class StreamWebSocketManager: NSObject, WebSocketDelegate {
     func areUpdateEnabled() -> Bool { return updatesEnabled }
 
     func create(url: String, header: [String: String]?, enableCompression _: Bool?, disableSSL _: Bool?, enableRetries: Bool) {
-        var request = URLRequest(url: URL(string: url)!)
+        let httpsURL = url.replacingOccurrences(of: "wss://", with: "https://")
+        var request = URLRequest(url: URL(string: httpsURL)!)
         if header != nil {
             for key in header!.keys {
                 request.setValue(header![key], forHTTPHeaderField: key)
