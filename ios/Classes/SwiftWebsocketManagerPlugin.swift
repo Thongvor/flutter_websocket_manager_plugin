@@ -2,20 +2,18 @@ import Flutter
 import UIKit
 
 enum ChannelName {
-    static let onMessage: String = "websocket_manager/message"
-    static let onDone: String = "websocket_manager/done"
-    static let status: String = "websocket_manager/status"
-    static let onOpen: String = "websocket_manager/open"
-    static let onFailure: String = "websocket_manager/failure"
+    static let message: String = "websocket_manager/message"
+    static let done: String = "websocket_manager/done"
+    static let open: String = "websocket_manager/open"
 }
 
 @available(iOS 9.0, *)
 public class SwiftWebsocketManagerPlugin: NSObject, FlutterPlugin {
-    let openStreamHandler = EventStreamHandler()
     let failureStreamHandler = EventStreamHandler()
     let messageStreamHandler = EventStreamHandler()
     let closeStreamHandler = EventStreamHandler()
-    let statusStreamHandler = EventStreamHandler()
+    let openStreamHandler = EventStreamHandler()
+    
     let streamWebSocketManager = StreamWebSocketManager()
 
     public static func register(with registrar: FlutterPluginRegistrar) {
@@ -30,12 +28,12 @@ public class SwiftWebsocketManagerPlugin: NSObject, FlutterPlugin {
 
     func eventChannelRegister(_ registrar: FlutterPluginRegistrar) {
         // Stream setup
-        FlutterEventChannel(name: ChannelName.onMessage, binaryMessenger: registrar.messenger())
+        FlutterEventChannel(name: ChannelName.message, binaryMessenger: registrar.messenger())
             .setStreamHandler(messageStreamHandler)
-        FlutterEventChannel(name: ChannelName.onDone, binaryMessenger: registrar.messenger())
+        FlutterEventChannel(name: ChannelName.done, binaryMessenger: registrar.messenger())
             .setStreamHandler(closeStreamHandler)
-        FlutterEventChannel(name: ChannelName.status, binaryMessenger: registrar.messenger())
-            .setStreamHandler(statusStreamHandler)
+        FlutterEventChannel(name: ChannelName.open, binaryMessenger: registrar.messenger())
+            .setStreamHandler(openStreamHandler)
     }
 
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
